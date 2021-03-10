@@ -2,6 +2,33 @@ from tkinter import *
 from tkinter import ttk,messagebox
 from PIL import Image,ImageTk
 import psycopg2
+
+DB_NAME = "SCC_POS" 
+DB_HOST = "localhost"
+DB_PORT = "5432"
+DB_USER = "postgres"
+DB_PASS = "root"
+
+
+
+
+
+conn = psycopg2.connect(database=DB_NAME,user=DB_USER,host=DB_HOST,port=DB_PORT,password=DB_PASS)
+print('database connected')
+my_cursor=conn.cursor()
+my_cursor.execute("""CREATE TABLE IF NOT EXISTS users(
+	id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255),
+	last_name VARCHAR(255),
+    contact VARCHAR(20),
+    email VARCHAR(255),
+    question VARCHAR(50),
+    answer VARCHAR(50),
+    password VARCHAR(50),
+    conform_password VARCHAR(50)
+	)""")
+conn.commit()
+
 class Register():
     def __init__(self,root):
         self.root=root
