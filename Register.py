@@ -17,7 +17,6 @@ conn = psycopg2.connect(database=DB_NAME,user=DB_USER,host=DB_HOST,port=DB_PORT,
 print('database connected')
 my_cursor=conn.cursor()
 my_cursor.execute("""CREATE TABLE IF NOT EXISTS users(
-	id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
 	last_name VARCHAR(255),
     contact VARCHAR(20),
@@ -90,7 +89,15 @@ class Register():
         
         btn_login=Button(self.root,text="Login",font=("times new roman",15),bg="purple1",cursor="hand2").place(x=150,y=510,width=250)
 
-
+    def clear_screen(self):
+        self.txt_fname.delete(0,END)
+        self.txt_lname.delete(0,END)
+        self.txt_contact.delete(0,END)
+        self.txt_email.delete(0,END)
+        self.cmb_quest.delete(0,END)
+        self.txt_answer.delete(0,END)
+        self.txt_password.delete(0,END)
+        self.txt_conform_password.delete(0,END)
     def register_data(self):
         if self.txt_fname.get()=="" or self.txt_lname.get()=="" or self.txt_email.get()=="" or self.txt_contact.get()=="" or self.txt_conform_password.get()=="" or self.cmb_quest.get()=="Select" or self.txt_answer.get()=="" or self.txt_password.get()=="" or self.txt_conform_password.get()=="":
             messagebox.showerror("Error","All Fields are Required",parent=self.root)
@@ -99,7 +106,36 @@ class Register():
         elif self.var_chk.get()==0:
             messagebox.showerror("Error","Agree to out terms and conditions",parent=self.root)
         else:
-            messagebox.showinfo("Success","Register Successfull",parent=self.root)
+            try:
+                # sql_command="INSERT INTO users (first_name,last_name,contact,email,question,answer,password,conform_password) VALUES(%s,%s,%s,%s,%s,%s,%s)"
+                # values =(self.txt_fname.get(),self.txt_lname.get(),self.txt_contact.get(),self.txt_email.get(),self.cmb_quest.get(),self.txt_answer.get(),self.txt_password.get(),self.txt_conform_password.get())
+                # my_cursor.execute("select * from users where email=%s",self.txt_email.get())
+                # row=my_cursor.fetchone()
+                # print(row)
+                # if row!=None:
+                #     messagebox.showerror("Error","Email Already Exists",parent=self.root)
+                # else:
+                my_cursor.execute("select * from users where email=%s",(self.txt_email.get(),))
+                row=my_cursor.fetchone()
+                if row!=None:
+                    messagebox.showerror("Error","Email Already Exists",parent=self.root)
+                else:
+                    my_cursor.execute("insert into users (first_name,last_name,contact,email,question,answer,password,conform_password) values(%s,%s,%s,%s,%s,%s,%s,%s)",
+                                        (self.txt_fname.get(),
+                                        self.txt_lname.get(),
+                                        self.txt_contact.get(),
+                                        self.txt_email.get(),
+                                        self.cmb_quest.get(),
+                                        self.txt_answer.get(),
+                                        self.txt_password.get(),
+                                        self.txt_conform_password.get()
+                                        ))
+                    conn.commit()
+                
+                    messagebox.showinfo("Success","Register Successfull",parent=self.root)
+                    self.clear_screen()
+            except Exception as es:
+                messagebox.showerror("Error",f"Error due to: {str(es)}",parent=self.root)
             
         
 
