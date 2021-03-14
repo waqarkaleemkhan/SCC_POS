@@ -35,7 +35,7 @@ class Clock():
 
         #Password field
         password=Label(login_frame,text="Password",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=250,y=250)
-        self.txt_password=Entry(login_frame,font=("times new roman",15),bg="light gray")
+        self.txt_password=Entry(login_frame,show='*',font=("times new roman",15),bg="light gray")
         self.txt_password.place(x=250,y=280,width=350,height=35)
 
 

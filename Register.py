@@ -17,6 +17,7 @@ conn = psycopg2.connect(database=DB_NAME,user=DB_USER,host=DB_HOST,port=DB_PORT,
 print('database connected')
 my_cursor=conn.cursor()
 my_cursor.execute("""CREATE TABLE IF NOT EXISTS users(
+    user_id SERIAL PRIMARY KEY,
     first_name VARCHAR(255),
 	last_name VARCHAR(255),
     contact VARCHAR(20),
@@ -75,11 +76,11 @@ class Register():
         self.txt_answer.place(x=370,y=270,width=250)
 
         password=Label(frame1,text="Password",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=50,y=310)
-        self.txt_password=Entry(frame1,font=("times new roman",15),bg="light gray")
+        self.txt_password=Entry(frame1,show='*',font=("times new roman",15),bg="light gray")
         self.txt_password.place(x=50,y=340,width=250)
 
         conform_password=Label(frame1,text="Conform Password",font=("times new roman",15,"bold"),bg="white",fg="gray").place(x=370,y=310)
-        self.txt_conform_password=Entry(frame1,font=("times new roman",15),bg="light gray")
+        self.txt_conform_password=Entry(frame1,show='*',font=("times new roman",15),bg="light gray")
         self.txt_conform_password.place(x=370,y=340,width=250)
 
         self.var_chk=IntVar()
