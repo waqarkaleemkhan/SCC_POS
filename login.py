@@ -3,6 +3,14 @@ from datetime import *
 import time
 from PIL import Image,ImageTk,ImageDraw
 from math import*
+import psycopg2
+from tkinter import messagebox
+
+DB_NAME = "SCC_POS" 
+DB_HOST = "localhost"
+DB_PORT = "5432"
+DB_USER = "postgres"
+DB_PASS = "root"
 class Clock():
     def __init__(self,root):
         self.root=root
@@ -32,9 +40,9 @@ class Clock():
 
 
         #rgister button
-        rgister_btn=Button(login_frame,text='For New Account Register Here',font=("times new roman",12),bg="white",fg="#B00857",bd=0,cursor="hand2").place(x=243,y=320)
+        rgister_btn=Button(login_frame,command=self.register_window,text='For New Account Register Here',font=("times new roman",12),bg="white",fg="#B00857",bd=0,cursor="hand2").place(x=243,y=320)
 
-        login_btn=Button(login_frame,text='Login Here',font=("times new roman",15),bg="purple1",fg="white",cursor="hand2").place(x=250,y=370,width=250)
+        login_btn=Button(login_frame,command=self.login ,text='Login Here',font=("times new roman",15),bg="purple1",fg="white",cursor="hand2").place(x=250,y=370,width=250)
 
 
         #label to place the clock image
@@ -74,7 +82,32 @@ class Clock():
         self.img=ImageTk.PhotoImage(file="images/clock_new.png")
         self.lbl.config(image=self.img)
         self.lbl.after(200,self.working_clock)
-        
+    
+    def register_window(self):
+        self.root.destroy()
+        import Register
+
+
+    def login(self):
+        if self.txt_email.get()=="" or self.txt_password.get()=="":
+            messagebox.showerror("Error","All Filds are Required",parent=self.root)
+
+        try:
+            conn = psycopg2.connect(database=DB_NAME,user=DB_USER,host=DB_HOST,port=DB_PORT,password=DB_PASS)
+            print('database connected')
+            my_cursor=conn.cursor()
+            my_cursor.execute("select * from users where email=%s and password=%s",(self.txt_email.get(),self.txt_password.get()))
+            row=my_cursor.fetchone()
+            if row==None:
+                messagebox.showerror("Error","Email or Passowrd Incorect",parent=self.root)
+                
+            else:
+                messagebox.showinfo("Success","Welcome",parent=self.root)
+                self.root.destroy()
+                import product
+            conn.close()
+        except Exception as es:
+            messagebox.showerror("Error",f"Error Due to:{str(es)}")
 
 root=Tk()
 obj=Clock(root)

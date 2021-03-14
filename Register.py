@@ -87,7 +87,7 @@ class Register():
         
         btn_register=Button(frame1,text="Register",command=self.register_data, font=("times new roman",15),bg="purple1").place(x=50,y=420,width=250)
         
-        btn_login=Button(self.root,text="Login",font=("times new roman",15),bg="purple1",cursor="hand2").place(x=150,y=510,width=250)
+        btn_login=Button(self.root,command=self.login_window,text="Login",font=("times new roman",15),bg="purple1",cursor="hand2").place(x=150,y=510,width=250)
 
     def clear_screen(self):
         self.txt_fname.delete(0,END)
@@ -98,6 +98,11 @@ class Register():
         self.txt_answer.delete(0,END)
         self.txt_password.delete(0,END)
         self.txt_conform_password.delete(0,END)
+    
+    def login_window(self):
+        self.root.destroy()
+        import login
+
     def register_data(self):
         if self.txt_fname.get()=="" or self.txt_lname.get()=="" or self.txt_email.get()=="" or self.txt_contact.get()=="" or self.txt_conform_password.get()=="" or self.cmb_quest.get()=="Select" or self.txt_answer.get()=="" or self.txt_password.get()=="" or self.txt_conform_password.get()=="":
             messagebox.showerror("Error","All Fields are Required",parent=self.root)
