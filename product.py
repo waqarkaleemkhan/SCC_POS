@@ -1,5 +1,6 @@
 from tkinter import *
 import psycopg2
+from tkinter import messagebox
 
 DB_NAME = "SCC_POS" 
 DB_HOST = "localhost"
@@ -38,12 +39,43 @@ class Product():
         
         manage_Title=Label(manage_Frame,text="Manage Products",bg="purple1",fg="white",font=("times new roman",20,"bold"))
         manage_Title.grid(row=0,columnspan=2,pady=20)
+        
+        product_Name=Label(manage_Frame,text="Product Name",font=("times new roman",16,"bold"),bg="purple1",fg="white").place(x=10,y=60)
+        self.txt_product_Name=Entry(manage_Frame,font=("times new roman",15))
+        self.txt_product_Name.place(x=170,y=60)
+
+        product_Price=Label(manage_Frame,text="Product Price",font=("times new roman",16,"bold"),bg="purple1",fg="white").place(x=10,y=100)
+        self.txt_product_Price=Entry(manage_Frame,font=("times new roman",15))
+        self.txt_product_Price.place(x=170,y=100)
+
+        product_Quantity=Label(manage_Frame,text="Product Qty",font=("times new roman",16,"bold"),bg="purple1",fg="white").place(x=10,y=140)
+        self.txt_product_Quantity=Entry(manage_Frame,font=("times new roman",15))
+        self.txt_product_Quantity.place(x=170,y=140)
+
+        btn_Product_Save=Button(text='Save Product',command=self.save_product,bg="skyblue",fg="white",font=("times new roman",16)).place(x=40,y=250)
         #right frame named detail frame
 
         detail_Frame=Frame(self.root,bd=4,relief=RIDGE,bg="purple1")
         detail_Frame.place(x=500,y=40,width=850,height=560)
 
 
+    # saving product
+    def save_product(self):
+        if self.txt_product_Name.get()=="" or self.txt_product_Price.get()=="" or self.txt_product_Quantity.get()=="":
+            messagebox.showerror("Error","All Fields Are Required",parent=self.root)
+
+        else:
+            try:
+                my_cursor.execute("insert into products(product_name,product_price,product_quantity) values(%s,%s,%s)",
+                (self.txt_product_Name.get(),
+                self.txt_product_Price.get(),
+                self.txt_product_Quantity.get()
+
+                ))
+                conn.commit()
+                messagebox.showinfo("Success","Product Add Successfully",parent=self.root)
+            except Exception as es:
+                messagebox.showerror("Error",f"Error due to:{str(es)}",parent=self.root)
 
 
 root=Tk()
