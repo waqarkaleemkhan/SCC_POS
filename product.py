@@ -58,7 +58,10 @@ class Product():
         detail_Frame=Frame(self.root,bd=4,relief=RIDGE,bg="purple1")
         detail_Frame.place(x=500,y=40,width=850,height=560)
 
-
+    def clear_screen_product(self):
+        self.txt_product_Name.delete(0,END),
+        self.txt_product_Price.delete(0,END),
+        self.txt_product_Quantity.delete(0,END)
     # saving product
     def save_product(self):
         if self.txt_product_Name.get()=="" or self.txt_product_Price.get()=="" or self.txt_product_Quantity.get()=="":
@@ -74,6 +77,7 @@ class Product():
                 ))
                 conn.commit()
                 messagebox.showinfo("Success","Product Add Successfully",parent=self.root)
+                self.clear_screen_product()
             except Exception as es:
                 messagebox.showerror("Error",f"Error due to:{str(es)}",parent=self.root)
 
