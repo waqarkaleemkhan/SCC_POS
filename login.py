@@ -40,7 +40,10 @@ class Clock():
 
 
         #rgister button
-        rgister_btn=Button(login_frame,command=self.register_window,text='For New Account Register Here',font=("times new roman",12),bg="white",fg="#B00857",bd=0,cursor="hand2").place(x=243,y=320)
+        rgister_btn=Button(login_frame,command=self.register_window,text='Register New Account',font=("times new roman",12),bg="white",fg="#B00857",bd=0,cursor="hand2").place(x=243,y=320)
+
+        forget_pswrd_btn=Button(login_frame,command=self.forget_pswrd_window,text='Forget Password',font=("times new roman",12),bg="white",fg="#B00857",bd=0,cursor="hand2").place(x=485,y=320)
+
 
         login_btn=Button(login_frame,command=self.login ,text='Login Here',font=("times new roman",15),bg="purple1",fg="white",cursor="hand2").place(x=250,y=370,width=250)
 
@@ -87,6 +90,15 @@ class Clock():
         self.root.destroy()
         import Register
 
+    def forget_pswrd_window(self):
+        self.root2=Toplevel()
+        self.root2.title("Forget Password")
+        self.root2.geometry("350x400+400+200")
+        self.root2.config(bg="purple1")
+        self.root2.focus_force()
+        self.root2.grab_set() #grab set will keep the window untill we close it
+        title_forget_password=Label(self.root2,text="Forget Password",font=("times new roman",20,"bold"),bg="purple1",fg="white")
+        title_forget_password.pack(side=TOP,fill=X)
 
     def login(self):
         if self.txt_email.get()=="" or self.txt_password.get()=="":
