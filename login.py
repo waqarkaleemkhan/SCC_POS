@@ -5,6 +5,7 @@ from PIL import Image,ImageTk,ImageDraw
 from math import*
 import psycopg2
 from tkinter import messagebox
+from tkinter import ttk,messagebox
 
 DB_NAME = "SCC_POS" 
 DB_HOST = "localhost"
@@ -93,12 +94,29 @@ class Clock():
     def forget_pswrd_window(self):
         self.root2=Toplevel()
         self.root2.title("Forget Password")
-        self.root2.geometry("350x400+400+200")
+        self.root2.geometry("500x500+400+200")
         self.root2.config(bg="purple1")
         self.root2.focus_force()
         self.root2.grab_set() #grab set will keep the window untill we close it
         title_forget_password=Label(self.root2,text="Forget Password",font=("times new roman",20,"bold"),bg="purple1",fg="white")
         title_forget_password.pack(side=TOP,fill=X)
+
+        question=Label(self.root2,text="Securtiy Qustion",font=("times new roman",15,"bold"),bg="purple1",fg="white").place(x=120,y=100)
+        self.cmb_quest=ttk.Combobox(self.root2,font=("times new roman",13),state="readonly",justify=CENTER)
+        self.cmb_quest['values']=("Select","Your first pet name","Your Birth Place","Your Best Friend Name")
+        self.cmb_quest.place(x=120,y=130,width=250)
+        self.cmb_quest.current(0)
+
+        answer=Label(self.root2,text="Answer",font=("times new roman",15,"bold"),bg="purple1",fg="white").place(x=120,y=170)
+        self.txt_answer=Entry(self.root2,font=("times new roman",15))
+        self.txt_answer.place(x=120,y=200,width=250)
+
+        new_password=Label(self.root2,text="New Password",font=("times new roman",15,"bold"),bg="purple1",fg="white").place(x=120,y=240)
+        self.txt_new_password=Entry(self.root2,font=("times new roman",15))
+        self.txt_new_password.place(x=120,y=270,width=250)
+
+        btn_password_save=Button(self.root2,text="Change Password",font=("times new roman",15,"bold"),bg="skyblue",fg="white").place(x=120,y=330,width=250)
+
 
     def login(self):
         if self.txt_email.get()=="" or self.txt_password.get()=="":
