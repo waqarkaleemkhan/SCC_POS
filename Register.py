@@ -107,10 +107,14 @@ class Register():
     def register_data(self):
         if self.txt_fname.get()=="" or self.txt_lname.get()=="" or self.txt_email.get()=="" or self.txt_contact.get()=="" or self.txt_conform_password.get()=="" or self.cmb_quest.get()=="Select" or self.txt_answer.get()=="" or self.txt_password.get()=="" or self.txt_conform_password.get()=="":
             messagebox.showerror("Error","All Fields are Required",parent=self.root)
+        elif len(self.txt_password.get()) < 5:
+            messagebox.showerror("Error","Password must be 6 digits or alphabits",parent=self.root)
+            
         elif self.txt_password.get()!=self.txt_conform_password.get():
             messagebox.showerror("Error","Password is not same",parent=self.root)
         elif self.var_chk.get()==0:
             messagebox.showerror("Error","Agree to out terms and conditions",parent=self.root)
+        
         else:
             try:
                 # sql_command="INSERT INTO users (first_name,last_name,contact,email,question,answer,password,conform_password) VALUES(%s,%s,%s,%s,%s,%s,%s)"
