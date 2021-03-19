@@ -93,7 +93,26 @@ class Clock():
 
 
     def forget_pswrd(self):
-        if self.cmb_quest.get()=="Select" or self.txt_answer.get=="" or self.txt_new_password==""
+        if self.cmb_quest.get()=="Select" or self.txt_answer.get=="" or self.txt_new_password=="":
+            messagebox.showerror("Error","All Fields are required",parent=self.root2)
+        else:
+            try:
+                conn = psycopg2.connect(database=DB_NAME,user=DB_USER,host=DB_HOST,port=DB_PORT,password=DB_PASS)
+                print('database connected')
+                my_cursor=conn.cursor()
+                my_cursor.execute("select * from users where email=%s and question=%s and answer=%s",(self.txt_email.get(),self.cmb_quest.get(),self.txt_answer.get()))
+                row=my_cursor.fetchone()
+                if row==None:
+                    messagebox.showerror("Error","Please select the correct security questiona and answer",parent=self.root)
+                else:
+                    my_cursor.execute("update users set password=%s where email=%s",(self.txt_new_password.get(),self.txt_email.get()))
+                    conn.commit()
+                    conn.close()
+                    messagebox.showinfo("Success","Your password is updated",parent=self.root2)
+
+            except Exception as es:
+                messagebox.showerror("Error",f"Error Due to:{str(es)}",parent=self.root2)
+
 
 
     def forget_pswrd_window(self):
@@ -134,7 +153,7 @@ class Clock():
                     self.txt_new_password=Entry(self.root2,font=("times new roman",15))
                     self.txt_new_password.place(x=120,y=270,width=250)
 
-                    btn_password_save=Button(self.root2,text="Change Password",font=("times new roman",15,"bold"),bg="skyblue",fg="white").place(x=120,y=330,width=250)
+                    btn_password_save=Button(self.root2,command=self.forget_pswrd ,text="Change Password",font=("times new roman",15,"bold"),bg="skyblue",fg="white").place(x=120,y=330,width=250)
                 
             except Exception as es:
                 messagebox.showerror("Error",f"Error Due to:{str(es)}")
