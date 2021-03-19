@@ -54,39 +54,13 @@ class Clock():
         self.lbl.place(x=90,y=120,height=450,width=350)
         # self.clock_image()
         self.working_clock()
-    def clock_image(self,hr,min_,sec_):
-        #for clock Image
-        clock=Image.new("RGB",(400,400),(8,25,35)) #create new empty image first size secod color
-        draw=ImageDraw.Draw(clock) # draw new image
-        bg=Image.open("images/cl.jpg") # open the image downloaded
-        bg=bg.resize((300,300),Image.ANTIALIAS) # size th image use ANTIALIAS for not breaking pixles
-        clock.paste(bg,(50,50))#paste the image on new image which is create
-        
-        # for hour line image
-        #           x1,y1,x2,y2
-        origin=200,200
-        draw.line((origin,200+50*sin(radians(hr)),200-50*cos(radians(hr))),fill="#DF005E",width=4)
-        #for min line image
-        draw.line((origin,200+80*sin(radians(min_)),200-80*cos(radians(min_))),fill="purple",width=3)
-        #for sec line
-        draw.line((origin,200+100*sin(radians(sec_)),200-100*cos(radians(sec_))),fill="yellow",width=2)
-        #for circle in center
-        draw.ellipse((195,195,210,210),fill="#1AD5D5")
-        clock.save("images/clock_new.png")#save the image
 
-    def working_clock(self):
-        hour=datetime.now().time().hour
-        minutes=datetime.now().time().minute
-        seconds=datetime.now().time().second
-        hr=(hour/12)*360
-        min_=(minutes/60)*360
-        sec_=(seconds/60)*360
-        self.clock_image(hr,min_,sec_)
-
-        self.img=ImageTk.PhotoImage(file="images/clock_new.png")
-        self.lbl.config(image=self.img)
-        self.lbl.after(200,self.working_clock)
-    
+    def reset(self):
+        self.cmb_quest.current(0)
+        self.txt_new_password.delete(0,END)
+        self.txt_answer.delete(0,END)
+        self.txt_password.delete(0,END)
+        self.txt_email.delete(0,END)
     def register_window(self):
         self.root.destroy()
         import Register
@@ -103,13 +77,14 @@ class Clock():
                 my_cursor.execute("select * from users where email=%s and question=%s and answer=%s",(self.txt_email.get(),self.cmb_quest.get(),self.txt_answer.get()))
                 row=my_cursor.fetchone()
                 if row==None:
-                    messagebox.showerror("Error","Please select the correct security questiona and answer",parent=self.root)
+                    messagebox.showerror("Error","Please select the correct security questiona and answer",parent=self.root2)
                 else:
                     my_cursor.execute("update users set password=%s where email=%s",(self.txt_new_password.get(),self.txt_email.get()))
                     conn.commit()
                     conn.close()
                     messagebox.showinfo("Success","Your password is updated",parent=self.root2)
-
+                    self.reset()
+                    self.root2.destroy()
             except Exception as es:
                 messagebox.showerror("Error",f"Error Due to:{str(es)}",parent=self.root2)
 
@@ -179,6 +154,45 @@ class Clock():
             conn.close()
         except Exception as es:
             messagebox.showerror("Error",f"Error Due to:{str(es)}")
+
+
+
+
+    def clock_image(self,hr,min_,sec_):
+        #for clock Image
+        clock=Image.new("RGB",(400,400),(8,25,35)) #create new empty image first size secod color
+        draw=ImageDraw.Draw(clock) # draw new image
+        bg=Image.open("images/cl.jpg") # open the image downloaded
+        bg=bg.resize((300,300),Image.ANTIALIAS) # size th image use ANTIALIAS for not breaking pixles
+        clock.paste(bg,(50,50))#paste the image on new image which is create
+        
+        # for hour line image
+        #           x1,y1,x2,y2
+        origin=200,200
+        draw.line((origin,200+50*sin(radians(hr)),200-50*cos(radians(hr))),fill="#DF005E",width=4)
+        #for min line image
+        draw.line((origin,200+80*sin(radians(min_)),200-80*cos(radians(min_))),fill="purple",width=3)
+        #for sec line
+        draw.line((origin,200+100*sin(radians(sec_)),200-100*cos(radians(sec_))),fill="yellow",width=2)
+        #for circle in center
+        draw.ellipse((195,195,210,210),fill="#1AD5D5")
+        clock.save("images/clock_new.png")#save the image
+
+    def working_clock(self):
+        hour=datetime.now().time().hour
+        minutes=datetime.now().time().minute
+        seconds=datetime.now().time().second
+        hr=(hour/12)*360
+        min_=(minutes/60)*360
+        sec_=(seconds/60)*360
+        self.clock_image(hr,min_,sec_)
+
+        self.img=ImageTk.PhotoImage(file="images/clock_new.png")
+        self.lbl.config(image=self.img)
+        self.lbl.after(200,self.working_clock)
+
+
+
 
 root=Tk()
 obj=Clock(root)
